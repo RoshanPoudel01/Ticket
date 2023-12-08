@@ -1,0 +1,61 @@
+import React from "react";
+import { Box } from "@chakra-ui/react";
+import MovieCard from "./MovieCard";
+import Carousel from "better-react-carousel";
+const movies = [
+  {
+    id: 1,
+    title: "Pathaan",
+    genre: "Action/Adventure",
+    image:
+      "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcSmoZIoFgIkKCledRzZT3q3xy64ZwMfnVXSQUdfp7cSo1suHPye",
+  },
+  {
+    id: 2,
+    title: "Frozen",
+    genre: "Adventure/Animation",
+    image:
+      "https://m.media-amazon.com/images/M/MV5BMTQ1MjQwMTE5OF5BMl5BanBnXkFtZTgwNjk3MTcyMDE@._V1_FMjpg_UX1000_.jpg",
+  },
+  {
+    id: 3,
+    title: "Salaar",
+    genre: "Action",
+    image:
+      "https://m.media-amazon.com/images/M/MV5BOTk4ZDQ1ZTctNzU3MC00NmY4LWJjMzItNDMwZTA2ODhiYWM5XkEyXkFqcGdeQXVyMTUzNTgzNzM0._V1_.jpg",
+  },
+  {
+    id: 4,
+    title: "Tiger 3",
+    genre: "Action/Adventure",
+    image:
+      "https://www.yashrajfilms.com/images/default-source/movies/tiger-3/tiger-3---salman-khan-katrina-kaif5f98ada026f56f7f9f64ff0e00090313.jpg?sfvrsn=866dc2cc_9",
+  },
+  {
+    id: 5,
+    title: "Loki",
+    genre: "Adventure/Animation",
+    image:
+      "https://m.media-amazon.com/images/M/MV5BNTY1ZDQzNzQtZGM1Yy00YjRhLTliYmMtOGM2OWFlYTRjOTc2XkEyXkFqcGdeQXVyMTY3MDE5MDY1._V1_FMjpg_UX1000_.jpg",
+  },
+];
+const NowPlaying = () => {
+  return (
+    <Box display={"flex"} flexWrap={"wrap"} justifyContent={"center"} gap={2}>
+      {/* {movies?.map(({ id, title, genre }: Movie) => (
+        <MovieCard id={id} title={title} genre={genre} />
+      ))} */}
+      <Carousel cols={4} rows={1} loop={true}>
+        {movies?.map(({ id, title, genre, image }: Movie) => (
+          <Carousel.Item>
+            <MovieCard image={image} id={id} title={title} genre={genre} />
+          </Carousel.Item>
+        ))}
+
+        {/* ... */}
+      </Carousel>
+    </Box>
+  );
+};
+
+export default NowPlaying;
