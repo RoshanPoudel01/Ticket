@@ -3,4 +3,5 @@ export const Navlink = {
   movies: "/movies",
   login: "/login",
   register: "/register",
+  addMovie: "/addmovie",
 };
