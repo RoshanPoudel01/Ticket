@@ -6,4 +6,5 @@ interface Movie {
   rating?: string;
   actors?: string;
   image?: string;
+  duration?: string;
 }

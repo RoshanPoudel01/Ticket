@@ -47,7 +47,7 @@ const NowPlaying = () => {
       ))} */}
       <Carousel cols={4} rows={1} loop={true}>
         {movies?.map(({ id, title, genre, image }: Movie) => (
-          <Carousel.Item>
+          <Carousel.Item key={id}>
             <MovieCard image={image} id={id} title={title} genre={genre} />
           </Carousel.Item>
         ))}
