@@ -11,14 +11,34 @@ import {
   Text,
   Image,
 } from "@chakra-ui/react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { Navlink } from "../Helper/Navlink";
 const schema = yup.object().shape({
   username: yup.string().required("Please Enter your Username!"),
   password: yup.string().required("Please Enter your Password!"),
 });
 const Login = () => {
-  const handleLogin = (data: string) => {
-    console.log(JSON.stringify(data));
-    reset();
+  const navigate = useNavigate();
+  const handleLogin = async (data: string) => {
+    try {
+      console.log(JSON.stringify(data));
+      const result = await axios.post("http://localhost:5000/api/users/login", {
+        ...data,
+      });
+      console.log(result);
+      // // console.log(result);
+      if (result?.status === 200) {
+        await localStorage.setItem("usertoken", result?.data?.token);
+        navigate(Navlink?.homePage);
+      }
+
+      // toast.error(re);
+    } catch (e) {
+      console.log(e?.response?.data?.message);
+
+      // toast.error(e?.response?.data?.message);
+    }
   };
   const {
     register,

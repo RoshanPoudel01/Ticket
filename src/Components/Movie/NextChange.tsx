@@ -55,11 +55,11 @@ const NextChange = () => {
   }, []);
   return (
     <Box display={"flex"} flexWrap={"wrap"} justifyContent={"center"} gap={2}>
-      <Carousel cols={4} rows={1} loop={true}>
+      <Carousel cols={4} rows={1} loop showDots autoplay={3000}>
         {data?.map(({ id, title, genre, image, duration }: Movie) => (
           <Carousel.Item key={id}>
             <MovieCard
-              image={image??null}
+              image={image ?? null}
               id={id}
               title={title}
               genre={genre}

@@ -13,8 +13,24 @@ import {
   IconButton,
 } from "@chakra-ui/react";
 import NavItems from "./NavItems";
-const NavBar = ({ children }: any) => {
+import { useEffect, useMemo, useState } from "react";
+const NavBar = ({ children, isLogin }: any) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [userLogin, setUserLogin] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await localStorage.getItem("usertoken");
+        setUserLogin(data);
+      } catch (error) {
+        // Handle errors if needed
+        console.error("Error fetching user token:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <>
@@ -37,7 +53,7 @@ const NavBar = ({ children }: any) => {
           <NavItems />
         </Box>
         <Box p={2} display={{ base: "none", md: "flex" }}>
-          <Button fontSize={16}>Login</Button>
+          {!userLogin && <Button fontSize={16}>Login</Button>}
         </Box>
         <Popover returnFocusOnClose={false} closeOnBlur={false}>
           <PopoverTrigger>
