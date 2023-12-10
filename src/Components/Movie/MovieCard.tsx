@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Box, Image, Text } from "@chakra-ui/react";
 
-const MovieCard = ({ id, title, genre, image,duration }: Movie) => {
+const MovieCard = ({ id, title, genre, image, duration }: Movie) => {
   return (
     <Box
       height={"389"}
@@ -21,7 +21,13 @@ const MovieCard = ({ id, title, genre, image,duration }: Movie) => {
         },
       }}
     >
-      <Image objectFit={"cover"} height={"389"} width={"100%"} src={image} />
+      <Image
+        objectFit={"cover"}
+        height={"389"}
+        width={"100%"}
+        fallbackSrc="https://m.media-amazon.com/images/M/MV5BNTY1ZDQzNzQtZGM1Yy00YjRhLTliYmMtOGM2OWFlYTRjOTc2XkEyXkFqcGdeQXVyMTY3MDE5MDY1._V1_FMjpg_UX1000_.jpg"
+        src={image}
+      />
       <Box position={"absolute"} top={"70%"} left={"8%"}>
         <Text color={"white"} fontSize={16}>
           {genre}/{duration}

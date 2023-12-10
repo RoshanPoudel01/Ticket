@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
@@ -17,7 +17,8 @@ import {
 
 import { useState } from "react";
 import axios from "axios";
-import SelectOpt from "../Components/Select/Select";
+import Select from "react-select";
+import DropzoneComponent from "../Components/DropZone";
 const optionsValue: any = [
   { value: "Action", label: "Action" },
   { value: "Adventure", label: "Adventure" },
@@ -31,25 +32,54 @@ const optionsValue: any = [
 
 const schema = yup.object().shape({
   title: yup.string().required("Please Enter Movie Title"),
-
+  genre: yup
+    .array()
+    .required("Please select one option")
+    .min(1, "Please select one option"),
   duration: yup.string().required("Please Enter Movie Duration"),
-  image: yup.mixed(),
+  Language: yup.string().required("Please Enter Movie Language"),
+  image: yup.string(),
   tag: yup.string().required("Please choose a tag"),
   releaseDate: yup.string().required("Please set release date"),
 });
 const AddMovie = () => {
-  const [selectVal, setSelectVal] = useState([]);
   const [radioVal, setRadioVal] = useState("nextChange");
+  const [image, SetBannerImage] = useState("");
 
-  const handleAdd = (data: any): any => {
-    console.log(data);
-    // const addMovies = await axios.put("");
-    reset();
-    return data;
+  function fileToBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+
+      reader.readAsDataURL(file);
+      // console.log(reader);
+      reader.onload = () => {
+        resolve(reader.result.split(",")[1]);
+      };
+
+      reader.onerror = (error) => reject(error);
+    });
+  }
+  const handleAdd = async (data: any) => {
+    // console.log(image[0].type);
+    try {
+      const addMovies = await axios.post(
+        "http://localhost:5000/api/movies/addnew",
+        {
+          ...data,
+          genre: data?.genre?.map((item: any) => item.value),
+          image:
+            "data:" +
+            image[0].type +
+            ";base64," +
+            (await fileToBase64(image[0])),
+        }
+      );
+      reset();
+    } catch (error: any) {
+      console.error("Axios Error:", error?.response?.data);
+    }
   };
-  const handleSelect = (selected: any) => {
-    setSelectVal(selected);
-  };
+
   const {
     register,
     control,
@@ -69,7 +99,7 @@ const AddMovie = () => {
           >
             <Box display={"flex"} justifyContent={"center"}>
               <Text fontSize={18} fontWeight={"bold"}>
-                Add Hotel
+                Add Movie
               </Text>
             </Box>
             <Box>
@@ -80,6 +110,15 @@ const AddMovie = () => {
                 {...register("title", { required: true })}
               />
               <Text color="red">{errors.title?.message}</Text>
+            </Box>
+            <Box>
+              <FormLabel>Language</FormLabel>
+              <Input
+                id="language"
+                variant={"outline"}
+                {...register("Language", { required: true })}
+              />
+              <Text color="red">{errors.Language?.message}</Text>
             </Box>
             <Box>
               <FormLabel>Tags</FormLabel>
@@ -119,13 +158,26 @@ const AddMovie = () => {
               <Text color="red">{errors.releaseDate?.message}</Text>
             </Box>
             <Box>
-              <SelectOpt
-                label={"Genre"}
+              <Controller
+                name="genre" // Replace with your field name
                 control={control}
-                isMulti
-                value={selectVal}
-                options={optionsValue}
-                onChange={handleSelect}
+                render={({ field }) => (
+                  <Select
+                    isMulti
+                    {...field}
+                    options={optionsValue}
+                    // Add any other props you need for React Select
+                  />
+                )}
+              />
+              <Text color="red">{errors.genre?.message}</Text>
+            </Box>
+            <Box>
+              <DropzoneComponent
+                setAcceptedFiles={SetBannerImage}
+                helperText="Please Upload Image Files(.png .jpg .jpeg)"
+                title="Movie Image"
+                // showImage={hotel?.bannerimage ? hotel?.bannerimage : ""}
               />
             </Box>
 
